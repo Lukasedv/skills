@@ -37,23 +37,24 @@ Skills can be installed to:
 
 | Location | Scope | Path |
 |----------|-------|------|
-| Personal | All projects | `~/.copilot/skills/<skill-name>/` |
 | Project | Current repo only | `.github/skills/<skill-name>/` |
+| Personal | All projects | `~/.copilot/skills/<skill-name>/` |
 
-**Default**: Personal skills (`~/.copilot/skills/`)
+**Default**: Project skills (`.github/skills/`) - only install to personal profile if user explicitly requests it
 
 ## Workflow: Browse Available Skills
 
 ### Step 1: List Skills from Known Repositories
 
-Use the GitHub MCP Server to fetch repository contents:
+Use the `scripts/list-skills.sh` script:
 
-```
-# For anthropics/skills
-Use get_file_contents for owner: "anthropics", repo: "skills", path: "skills"
+```bash
+# List skills from default repository (anthropics/skills)
+./scripts/list-skills.sh
 
-# For github/awesome-copilot  
-Use get_file_contents for owner: "github", repo: "awesome-copilot", path: "skills"
+# List skills from a specific repository
+./scripts/list-skills.sh anthropics/skills
+./scripts/list-skills.sh github/awesome-copilot
 ```
 
 ### Step 2: Display Skills to User
@@ -70,49 +71,40 @@ Fetch and display the SKILL.md content for any skill the user is interested in.
 
 ## Workflow: Install a Skill
 
+**IMPORTANT**: Always use the scripts in `scripts/` folder to install skills. Do NOT manually fetch and write skill files.
+
 ### Step 1: Identify the Skill Source
 
 Parse the user's request to determine:
 - Skill name
 - Source repository (default to searching known repos)
-- Installation scope (personal or project)
+- Installation scope (project by default, personal only if user explicitly requests)
 
-### Step 2: Fetch Skill Contents
+### Step 2: Run the Install Script
 
-Use GitHub MCP Server to get all files in the skill directory:
-
-```
-get_file_contents for the skill directory to list all files
-Then fetch each file's content
-```
-
-### Step 3: Create Local Directory
+Use the `scripts/install-skill.sh` script to install the skill:
 
 ```bash
-# For personal installation
-mkdir -p ~/.copilot/skills/<skill-name>
+# For project installation (DEFAULT)
+./scripts/install-skill.sh <skill-name> <source-repo> .github/skills
 
-# For project installation  
-mkdir -p .github/skills/<skill-name>
+# For personal installation (only if user explicitly requests)
+./scripts/install-skill.sh <skill-name> <source-repo> ~/.copilot/skills
 ```
 
-### Step 4: Write Skill Files
+The script handles:
+- Creating the destination directory
+- Fetching the skill via sparse checkout
+- Trying multiple skill locations (skills/, .github/skills/, .claude/skills/)
+- Copying all skill files (SKILL.md, scripts/, references/, assets/, templates/, etc.)
+- Displaying the skill description
 
-Copy all files from the remote skill to the local directory:
-- SKILL.md (required)
-- scripts/ (if present)
-- references/ (if present)
-- assets/ (if present)
-- templates/ (if present)
-- Any other files
+### Step 3: Confirm Installation
 
-### Step 5: Confirm Installation
-
-Report to the user:
+The script will output:
 - Skill name installed
 - Installation location
 - Brief description of what the skill does
-- Any prerequisites or dependencies noted in the skill
 
 ## Workflow: Search for Skills
 
@@ -139,41 +131,37 @@ When given a GitHub URL or owner/repo reference:
 
 | User Says | Action |
 |-----------|--------|
-| "Install the webapp-testing skill" | Search repos, install matching skill |
-| "What skills are available?" | List all skills from known repos |
-| "Install pdf skill from anthropics/skills" | Install specific skill from specific repo |
-| "I need help with image manipulation" | Search for relevant skills, suggest matches |
-| "Add the github-issues skill to this project" | Install to .github/skills/ |
-| "Install all skills from anthropics/skills" | Batch install all available skills |
+| "Install the webapp-testing skill" | Run `./scripts/install-skill.sh webapp-testing <repo> .github/skills` |
+| "What skills are available?" | Run `./scripts/list-skills.sh` for known repos |
+| "Install pdf skill from anthropics/skills" | Run `./scripts/install-skill.sh pdf anthropics/skills .github/skills` |
+| "I need help with image manipulation" | Search for relevant skills with list script, suggest matches |
+| "Add the github-issues skill to this project" | Run `./scripts/install-skill.sh github-issues <repo> .github/skills` |
+| "Install skill to my personal profile" | Run `./scripts/install-skill.sh <skill> <repo> ~/.copilot/skills` |
+| "Install all skills from anthropics/skills" | Batch install using the install script for each |
 
-## Installation Script
+## Installation Scripts
 
-For batch operations or scripted installations, use:
+This skill includes helper scripts in `scripts/` that MUST be used for all installation operations:
+
+### scripts/install-skill.sh
 
 ```bash
-#!/bin/bash
-# install-skill.sh - Helper script for skill installation
+# Usage: ./scripts/install-skill.sh <skill-name> [source-repo] [install-path]
 
-SKILL_NAME="$1"
-SOURCE_REPO="${2:-anthropics/skills}"
-INSTALL_PATH="${3:-$HOME/.copilot/skills}"
+# Install to project (default)
+./scripts/install-skill.sh webapp-testing anthropics/skills .github/skills
 
-# Create destination
-mkdir -p "$INSTALL_PATH/$SKILL_NAME"
+# Install to personal profile (only when user explicitly requests)
+./scripts/install-skill.sh webapp-testing anthropics/skills ~/.copilot/skills
+```
 
-# Clone sparse checkout of just the skill
-git clone --depth 1 --filter=blob:none --sparse \
-  "https://github.com/$SOURCE_REPO.git" /tmp/skill-install
-cd /tmp/skill-install
-git sparse-checkout set "skills/$SKILL_NAME"
+### scripts/list-skills.sh
 
-# Copy to destination
-cp -r "skills/$SKILL_NAME"/* "$INSTALL_PATH/$SKILL_NAME/"
+```bash
+# Usage: ./scripts/list-skills.sh [source-repo]
 
-# Cleanup
-rm -rf /tmp/skill-install
-
-echo "Installed $SKILL_NAME to $INSTALL_PATH/$SKILL_NAME"
+./scripts/list-skills.sh                    # Lists from anthropics/skills
+./scripts/list-skills.sh github/awesome-copilot  # Lists from specific repo
 ```
 
 ## Troubleshooting

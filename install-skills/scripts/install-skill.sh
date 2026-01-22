@@ -12,7 +12,7 @@ set -e
 
 SKILL_NAME="$1"
 SOURCE_REPO="${2:-anthropics/skills}"
-INSTALL_PATH="${3:-$HOME/.copilot/skills}"
+INSTALL_PATH="${3:-.github/skills}"
 
 if [ -z "$SKILL_NAME" ]; then
     echo "Usage: $0 <skill-name> [source-repo] [install-path]"
@@ -20,12 +20,13 @@ if [ -z "$SKILL_NAME" ]; then
     echo "Arguments:"
     echo "  skill-name    Name of the skill to install (required)"
     echo "  source-repo   GitHub repo in owner/repo format (default: anthropics/skills)"
-    echo "  install-path  Where to install (default: ~/.copilot/skills)"
+    echo "  install-path  Where to install (default: .github/skills for project)"
     echo ""
     echo "Examples:"
     echo "  $0 webapp-testing"
     echo "  $0 pdf anthropics/skills"
     echo "  $0 github-issues github/awesome-copilot"
+    echo "  $0 my-skill anthropics/skills ~/.copilot/skills  # Personal install"
     exit 1
 fi
 
