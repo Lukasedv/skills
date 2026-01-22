@@ -1,48 +1,35 @@
-# Skills
+# Install-Skills
 
-```
-╔═════════════════════════════════════════════════════════╗
-║                                                         ║
-║   ┌─────────┐   ┌─────────┐   ┌─────────┐               ║
-║   │ Skill A │   │ Skill B │   │ Skill C │    ...        ║
-║   └────┬────┘   └────┬────┘   └────┬────┘               ║
-║        └─────────────┼─────────────┘                    ║
-║                      ▼                                  ║
-║           ╔═══════════════════╗                         ║
-║           ║  INSTALL-SKILLS   ║                         ║
-║           ║   🧙 Manager 🧙  ║                         ║
-║           ╚════════╤══════════╝                         ║
-║                    ▼                                    ║
-║           ┌───────────────────┐                         ║
-║           │  GitHub Copilot   │                         ║
-║           │       CLI         │                         ║
-║           └───────────────────┘                         ║
-║                                                         ║
-║   "One skill to find them, one skill to bring them,     ║
-║    One skill to install them all and in Copilot bind    ║
-║    them"                                                ║
-║                                                         ║
-╚═════════════════════════════════════════════════════════╝
-```
+A meta-skill for GitHub Copilot CLI that helps you discover, browse, and install Agent Skills from GitHub repositories.
 
-A collection of Agent Skills for GitHub Copilot CLI.
+## Quick Install
 
-## Available Skills
-
-| Skill | Description |
-|-------|-------------|
-| [install-skills](./install-skills/) | Automatically install and manage Agent Skills from GitHub repositories. Use when asked to "install a skill", "add a skill", "find skills", "browse skills", or when the user needs a specific capability that might exist as a community skill. Supports anthropics/skills, github/awesome-copilot, and custom GitHub repositories. |
-
-## Installation
-
-To install a skill from this repository:
+Run this command to install the skill to your personal GitHub Copilot profile:
 
 ```bash
-# Using the install script
-./install-skills/scripts/install-skill.sh <skill-name> Lukasedv/skills
+git clone --depth 1 https://github.com/Lukasedv/skills.git /tmp/skills && mkdir -p ~/.copilot/skills && cp -r /tmp/skills/install-skills ~/.copilot/skills/ && rm -rf /tmp/skills && echo "✓ install-skills installed to ~/.copilot/skills/"
+```
 
-# Or manually copy to your skills directory
-cp -r <skill-name> ~/.copilot/skills/
+## What It Does
+
+Once installed, you can ask GitHub Copilot CLI to:
+
+- **"Install a skill"** - Install skills from any GitHub repository
+- **"What skills are available?"** - Browse skills from known repositories
+- **"Find skills for X"** - Search for skills matching your needs
+
+Supports installing from:
+- `anthropics/skills`
+- `github/awesome-copilot`
+- Any custom GitHub repository with skills
+
+## Manual Installation
+
+If you prefer to install manually:
+
+```bash
+git clone https://github.com/Lukasedv/skills.git
+cp -r skills/install-skills ~/.copilot/skills/
 ```
 
 ## License
