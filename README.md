@@ -2,35 +2,68 @@
 
 A meta-skill for GitHub Copilot CLI that helps you discover, browse, and install Agent Skills from GitHub repositories.
 
-## Quick Install
+## Installation
 
-Run this command to install the skill to your personal GitHub Copilot profile:
+Follow the official instructions on how to install skills:
+https://docs.github.com/en/copilot/concepts/agents/about-agent-skills
 
-```bash
-git clone --depth 1 https://github.com/Lukasedv/skills.git /tmp/skills && mkdir -p ~/.copilot/skills && cp -r /tmp/skills/install-skills ~/.copilot/skills/ && rm -rf /tmp/skills && echo "✓ install-skills installed to ~/.copilot/skills/"
+## How It Works
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                         USER PROMPT                             │
+│  "Install all relevant skills for this repo"                    │
+└─────────────────────┬───────────────────────────────────────────┘
+                      │
+                      ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    INSTALL-SKILLS                               │
+│  ┌────────────────────────────────────────────────────────┐     │
+│  │ 1. Analyze repo to understand what skills are needed   │     │
+│  │ 2. Search known skill repositories                     │     │
+│  │ 3. Present matching skills to user                     │     │
+│  │ 4. Run install script for selected skills              │     │
+│  └────────────────────────────────────────────────────────┘     │
+└─────────────────────┬───────────────────────────────────────────┘
+                      │
+                      ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                   SKILL SOURCES                                 │
+│                                                                 │
+│   ┌──────────────────┐  ┌──────────────────┐  ┌────────────┐   │
+│   │ anthropics/skills│  │github/awesome-   │  │ Custom     │   │
+│   │                  │  │copilot           │  │ Repos      │   │
+│   └────────┬─────────┘  └────────┬─────────┘  └─────┬──────┘   │
+│            └─────────────────────┼──────────────────┘          │
+└──────────────────────────────────┼──────────────────────────────┘
+                                   │
+                                   ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    INSTALLED TO                                 │
+│                                                                 │
+│   .github/skills/<skill-name>/     (project - default)         │
+│   ~/.copilot/skills/<skill-name>/  (personal - on request)     │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-## What It Does
+## Example Prompts
 
-Once installed, you can ask GitHub Copilot CLI to:
+Once installed, try these prompts with GitHub Copilot CLI:
 
-- **"Install a skill"** - Install skills from any GitHub repository
-- **"What skills are available?"** - Browse skills from known repositories
-- **"Find skills for X"** - Search for skills matching your needs
+| Prompt | What It Does |
+|--------|--------------|
+| "Install all relevant skills for this repo" | Analyzes your project and installs matching skills |
+| "What skills are available?" | Lists skills from known repositories |
+| "Install the pdf skill" | Installs a specific skill by name |
+| "Find skills for testing" | Searches for skills matching a keyword |
+| "Install skills from anthropics/skills" | Browses and installs from a specific repo |
 
-Supports installing from:
-- `anthropics/skills`
-- `github/awesome-copilot`
-- Any custom GitHub repository with skills
+## Supported Skill Sources
 
-## Manual Installation
-
-If you prefer to install manually:
-
-```bash
-git clone https://github.com/Lukasedv/skills.git
-cp -r skills/install-skills ~/.copilot/skills/
-```
+- `anthropics/skills` - Official Anthropic skills collection
+- `github/awesome-copilot` - Community-curated skills
+- Any GitHub repository with skills in `skills/`, `.github/skills/`, or `.claude/skills/`
 
 ## License
 
