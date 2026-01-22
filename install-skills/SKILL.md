@@ -176,9 +176,8 @@ This skill includes helper scripts in `scripts/` that MUST be used for all insta
 ## Post-Installation
 
 After installing a skill:
-1. The skill is immediately available for use
-2. Copilot will automatically load it when relevant based on the description
-3. No restart required
+1. **Restart the CLI** to load the new skill (exit and reopen your terminal session)
+2. Once restarted, Copilot will automatically load it when relevant based on the description
 
 ## Uninstalling Skills
 
