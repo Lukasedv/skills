@@ -11,7 +11,7 @@ A meta-skill for discovering, browsing, and installing Agent Skills from online 
 
 If the user has the [skills.sh](https://skills.sh/) CLI installed (via `npx add-skill`), these scripts will automatically detect it and use the skills.sh CLI instead of the manual installation process. This provides:
 
-- **Better cross-agent compatibility**: Automatic detection and installation for Claude Code, Codex, Cursor, OpenCode, and other agents
+- **Better cross-agent compatibility**: Automatic detection and installation for Claude Code, OpenCode, Cursor, and other agents
 - **Auto-detection of agents**: The CLI knows where to install skills for each installed agent
 - **Access to skills registry**: Browse and install from the community skills marketplace
 

@@ -19,7 +19,17 @@ INSTALL_PATH="${3:-.github/skills}"
 
 # Check if skills.sh CLI (add-skill) is available
 check_skills_sh_cli() {
-    command -v npx >/dev/null 2>&1 && npx add-skill --version >/dev/null 2>&1
+    # Check if npx is available and if add-skill package exists in npm cache
+    # This avoids network calls by checking if the command would work without actually running it
+    if ! command -v npx >/dev/null 2>&1; then
+        return 1
+    fi
+    # Check if add-skill is installed globally or in local node_modules
+    if npm list -g add-skill >/dev/null 2>&1 || [ -d "node_modules/add-skill" ]; then
+        return 0
+    fi
+    # Fall back to checking if npx can resolve add-skill (may involve network)
+    npx --no add-skill --version >/dev/null 2>&1
 }
 
 # Use skills.sh CLI if available
@@ -40,7 +50,11 @@ use_skills_sh_cli() {
     fi
     
     # Check if this is a global/personal installation
-    if [[ "$install_path" == *".copilot/skills"* ]] || [[ "$install_path" == *"/.claude/skills"* ]]; then
+    # Match documented paths: ~/.copilot/skills and ~/.claude/skills
+    if [[ "$install_path" == "$HOME/.copilot/skills" ]] || \
+       [[ "$install_path" == "$HOME/.claude/skills" ]] || \
+       [[ "$install_path" == "~/.copilot/skills" ]] || \
+       [[ "$install_path" == "~/.claude/skills" ]]; then
         args+=("-g")
     fi
     
