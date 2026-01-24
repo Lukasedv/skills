@@ -23,7 +23,7 @@ check_skills_sh_cli() {
         return 1
     fi
     # Check if add-skill is installed globally or in local node_modules
-    if npm list -g add-skill >/dev/null 2>&1 || [ -d "node_modules/add-skill" ]; then
+    if command -v npm >/dev/null 2>&1 && npm list -g add-skill >/dev/null 2>&1 || [ -d "node_modules/add-skill" ]; then
         return 0
     fi
     # Fall back to checking if npx can resolve add-skill (may involve network)
