@@ -1,6 +1,6 @@
 ---
 name: install-skills
-description: 'Automatically install and manage Agent Skills from GitHub repositories. Use when asked to "install a skill", "add a skill", "find skills", "browse skills", "get skills from GitHub", or when the user needs a specific capability that might exist as a community skill. Supports anthropics/skills, github/awesome-copilot, and custom GitHub repositories.'
+description: 'Automatically install and manage Agent Skills from GitHub repositories. Use when asked to "install a skill", "add a skill", "find skills", "browse skills", "get skills from GitHub", or when the user needs a specific capability that might exist as a community skill. Supports anthropics/skills, github/awesome-copilot, microsoft/agent-skills, and custom GitHub repositories.'
 ---
 
 # Install Skills
@@ -23,6 +23,7 @@ A meta-skill for discovering, browsing, and installing Agent Skills from online 
 |------------|-------------|
 | `anthropics/skills` | Official Anthropic skills collection |
 | `github/awesome-copilot` | GitHub's community-curated skills in `skills/` directory |
+| `microsoft/agent-skills` | Microsoft agent skills collection in `.github/skills/` directory |
 
 ### Custom Repositories
 
@@ -55,6 +56,7 @@ Use the `scripts/list-skills.sh` script:
 # List skills from a specific repository
 ./scripts/list-skills.sh anthropics/skills
 ./scripts/list-skills.sh github/awesome-copilot
+./scripts/list-skills.sh microsoft/agent-skills
 ```
 
 ### Step 2: Display Skills to User
@@ -134,6 +136,7 @@ When given a GitHub URL or owner/repo reference:
 | "Install the webapp-testing skill" | Run `./scripts/install-skill.sh webapp-testing <repo> .github/skills` |
 | "What skills are available?" | Run `./scripts/list-skills.sh` for known repos |
 | "Install pdf skill from anthropics/skills" | Run `./scripts/install-skill.sh pdf anthropics/skills .github/skills` |
+| "Install azure-ai-search-python from microsoft/agent-skills" | Run `./scripts/install-skill.sh azure-ai-search-python microsoft/agent-skills .github/skills` |
 | "I need help with image manipulation" | Search for relevant skills with list script, suggest matches |
 | "Add the github-issues skill to this project" | Run `./scripts/install-skill.sh github-issues <repo> .github/skills` |
 | "Install skill to my personal profile" | Run `./scripts/install-skill.sh <skill> <repo> ~/.copilot/skills` |
@@ -162,6 +165,7 @@ This skill includes helper scripts in `scripts/` that MUST be used for all insta
 
 ./scripts/list-skills.sh                    # Lists from anthropics/skills
 ./scripts/list-skills.sh github/awesome-copilot  # Lists from specific repo
+./scripts/list-skills.sh microsoft/agent-skills  # Lists from microsoft repo
 ```
 
 ## Troubleshooting

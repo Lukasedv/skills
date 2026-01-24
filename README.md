@@ -58,11 +58,13 @@ Once installed, try these prompts with GitHub Copilot CLI:
 | "Install the pdf skill" | Installs a specific skill by name |
 | "Find skills for testing" | Searches for skills matching a keyword |
 | "Install skills from anthropics/skills" | Browses and installs from a specific repo |
+| "Install skills from microsoft/agent-skills" | Browses and installs from Microsoft's agent skills repo |
 
 ## Supported Skill Sources
 
 - `anthropics/skills` - Official Anthropic skills collection
 - `github/awesome-copilot` - Community-curated skills
+- `microsoft/agent-skills` - Microsoft agent skills collection
 - Any GitHub repository with skills in `skills/`, `.github/skills/`, or `.claude/skills/`
 
 ## License
