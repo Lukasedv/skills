@@ -50,11 +50,14 @@ use_skills_sh_cli() {
     fi
     
     # Check if this is a global/personal installation
-    # Match documented paths: ~/.copilot/skills and ~/.claude/skills
-    if [[ "$install_path" == "$HOME/.copilot/skills" ]] || \
-       [[ "$install_path" == "$HOME/.claude/skills" ]] || \
-       [[ "$install_path" == "~/.copilot/skills" ]] || \
-       [[ "$install_path" == "~/.claude/skills" ]]; then
+    # Treat any path under the user's home directory as a global install.
+    # This includes documented paths like ~/.copilot/skills and ~/.claude/skills,
+    # as well as other custom home-based paths (e.g., ~/.config/skills).
+    local normalized_install_path="$install_path"
+    if [[ "$normalized_install_path" == "~"* ]]; then
+        normalized_install_path="${normalized_install_path/#\~/$HOME}"
+    fi
+    if [[ "$normalized_install_path" == "$HOME/"* ]]; then
         args+=("-g")
     fi
     
