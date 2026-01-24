@@ -62,7 +62,11 @@ use_skills_sh_cli() {
     fi
     
     # Execute the skills.sh CLI
+    set +e
     npx add-skill "${args[@]}"
+    local status=$?
+    set -e
+    return "$status"
 }
 
 if [ -z "$SKILL_NAME" ]; then
