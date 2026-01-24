@@ -18,13 +18,13 @@ If the user has the [skills.sh](https://skills.sh/) CLI installed (via `npx add-
 To use the skills.sh CLI directly:
 ```bash
 # List skills from a repository
-npx add-skill vercel-labs/agent-skills --list
+npx add-skill anthropics/skills --list
 
 # Install a specific skill
-npx add-skill vercel-labs/agent-skills --skill release-notes
+npx add-skill anthropics/skills --skill release-notes
 
 # Install to global/personal directory
-npx add-skill vercel-labs/agent-skills -g
+npx add-skill anthropics/skills -g
 ```
 
 ## When to Use This Skill
