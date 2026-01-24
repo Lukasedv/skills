@@ -7,12 +7,46 @@
 #   ./install-skill.sh webapp-testing
 #   ./install-skill.sh pdf anthropics/skills
 #   ./install-skill.sh github-issues github/awesome-copilot ~/.copilot/skills
+#
+# If https://skills.sh/ CLI (add-skill) is installed, it will be used instead
+# for better cross-agent compatibility and auto-detection features.
 
 set -e
 
 SKILL_NAME="$1"
 SOURCE_REPO="${2:-anthropics/skills}"
 INSTALL_PATH="${3:-.github/skills}"
+
+# Check if skills.sh CLI (add-skill) is available
+check_skills_sh_cli() {
+    command -v npx >/dev/null 2>&1 && npx add-skill --version >/dev/null 2>&1
+}
+
+# Use skills.sh CLI if available
+use_skills_sh_cli() {
+    local skill="$1"
+    local repo="$2"
+    local install_path="$3"
+    
+    echo "Using skills.sh CLI (add-skill) for installation..."
+    echo ""
+    
+    # Build the command arguments
+    local args=("$repo")
+    
+    # Add skill-specific flag if a specific skill is requested
+    if [ -n "$skill" ]; then
+        args+=("--skill" "$skill")
+    fi
+    
+    # Check if this is a global/personal installation
+    if [[ "$install_path" == *".copilot/skills"* ]] || [[ "$install_path" == *"/.claude/skills"* ]]; then
+        args+=("-g")
+    fi
+    
+    # Execute the skills.sh CLI
+    npx add-skill "${args[@]}"
+}
 
 if [ -z "$SKILL_NAME" ]; then
     echo "Usage: $0 <skill-name> [source-repo] [install-path]"
@@ -29,6 +63,17 @@ if [ -z "$SKILL_NAME" ]; then
     echo "  $0 my-skill anthropics/skills ~/.copilot/skills  # Personal install"
     exit 1
 fi
+
+# Try to use skills.sh CLI if available
+if check_skills_sh_cli; then
+    use_skills_sh_cli "$SKILL_NAME" "$SOURCE_REPO" "$INSTALL_PATH"
+    exit 0
+fi
+
+# Fall back to manual installation if skills.sh CLI is not available
+echo "Note: skills.sh CLI not found, using manual installation."
+echo "Install skills.sh CLI for better cross-agent compatibility: npx add-skill --help"
+echo ""
 
 # Check if installing to project level (.github/skills) and not in a git repo
 if [[ "$INSTALL_PATH" == ".github/skills"* ]] && ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
