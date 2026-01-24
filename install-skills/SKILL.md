@@ -23,6 +23,7 @@ A meta-skill for discovering, browsing, and installing Agent Skills from online 
 |------------|-------------|
 | `anthropics/skills` | Official Anthropic skills collection |
 | `github/awesome-copilot` | GitHub's community-curated skills in `skills/` directory |
+| `microsoft/agent-skills` | Skills for Microsoft AI SDKs and Azure services in `.github/skills/` directory |
 
 ### Custom Repositories
 

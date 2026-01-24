@@ -63,6 +63,7 @@ Once installed, try these prompts with GitHub Copilot CLI:
 
 - `anthropics/skills` - Official Anthropic skills collection
 - `github/awesome-copilot` - Community-curated skills
+- `microsoft/agent-skills` - skills for Microsoft AI SDKs and Azure services 
 - Any GitHub repository with skills in `skills/`, `.github/skills/`, or `.claude/skills/`
 
 ## License
