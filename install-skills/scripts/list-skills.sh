@@ -38,13 +38,20 @@ use_skills_sh_cli() {
     echo ""
     
     # Execute the skills.sh CLI with --list flag
-    npx add-skill "$repo" --list
+    if ! npx add-skill "$repo" --list; then
+        echo ""
+        echo "Warning: skills.sh CLI (add-skill) failed. Falling back to manual listing."
+        return 1
+    fi
 }
 
 # Try to use skills.sh CLI if available
 if check_skills_sh_cli; then
-    use_skills_sh_cli "$SOURCE_REPO"
-    exit 0
+    if use_skills_sh_cli "$SOURCE_REPO"; then
+        exit 0
+    fi
+    echo ""
+    echo "Note: skills.sh CLI check passed but listing via CLI failed; using manual listing instead."
 fi
 
 # Fall back to manual listing if skills.sh CLI is not available
